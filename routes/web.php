@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
 Route::prefix('surat-masuk/')->group(function () {
     Route::get('index', [SuratMasukController::class, 'index'])->name('suratmasuk.index');
     Route::post('store', [SuratMasukController::class, 'store'])->name('suratmasuk.store');
