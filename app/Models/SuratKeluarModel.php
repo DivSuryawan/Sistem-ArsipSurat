@@ -17,8 +17,13 @@ class SuratKeluarModel extends Model
         'sifat',
         'lampiran',
         'instansi_id',
+        'user_id',
         'file_surat',
         'created_at',
         'updated_at'
     ];
+    public function user_rol()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
