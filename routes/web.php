@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SuratKeluarController;
 use App\Http\Controllers\Admin\SuratMasukController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,4 +35,12 @@ Route::prefix('surat-keluar/')->group(function () {
     Route::post('update/{id}', [SuratKeluarController::class, 'update'])->name('suratkeluar.update');
     Route::get('/delete/{id}', [SuratKeluarController::class, 'destroy'])->name('suratkeluar.delete');
     Route::get('/download/{id}', [SuratKeluarController::class, 'download'])->name('suratkeluar.download');
+});
+
+Route::prefix('user/')->group(function () {
+    Route::get('index', [UserController::class, 'index'])->name('user.index');
+    Route::post('store', [UserController::class, 'store'])->name('user.store');
+    Route::get('edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('update/', [UserController::class, 'update'])->name('user.update');
+    Route::get('/delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
 });

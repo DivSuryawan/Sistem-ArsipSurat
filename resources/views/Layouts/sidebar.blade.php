@@ -32,6 +32,12 @@
                                 <span>Surat Keluar</span>
                             </a>
                         </li>
+                        <li class="sidebar-item {{ request()->is('user/index') ? 'active' :'' }} ">
+                            <a href="/user/index" class="sidebar-link">
+                             <i class="fa-solid fa-users"></i>
+                                <span>Users</span>
+                            </a>
+                        </li>
                         
             </div>
         </div>
