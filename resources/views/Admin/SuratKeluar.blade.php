@@ -16,6 +16,7 @@
             class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
             <div class="dataTable-top">
                 <div class="mt-2 d-grid gap-2 d-md-flex justify-content-md-start ">
+                     @if (auth()->user()->status=='sekretaris')
                     <button
                         type="button"
                         class="btn btn-outline-primary "
@@ -23,6 +24,7 @@
                         data-bs-target="#upsertdata">
                         + Tambah Data
                     </button>
+                    @endif
                 </div>
                 <div class="dataTable-search">
                     <div class="mt-2 d-grid gap-2 d-md-flex ">
@@ -94,19 +96,23 @@
                                 <td>{{$d->alamat}}</td>
                                 <td>{{$d->file_surat}}</td>
                                 <td>
+                                    
                                     <a
                                         href="{{ route('suratkeluar.download',$d->file_surat) }}"
                                         class="btn btn-outline-success">
                                         <i class="fa-solid fa-download"></i>
                                     </a>
+                                     @if (auth()->user()->status=='sekretaris')
                                    <button class="btn btn-outline-primary" id="btn_edit" data-id="{{$d->id}}">
                                         <i class="fa fa-edit"></i>
                                     </button>
+
                                     <a
                                         href="{{ route('suratkeluar.delete',$d->id) }}"
                                         class="btn btn-outline-danger delete-confirm">
                                         <i class="fa fa-trash"></i>
                                     </a>
+                                    @endif
                                 </td>
                             </tr>
 

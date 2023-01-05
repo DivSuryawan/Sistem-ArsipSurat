@@ -42,6 +42,7 @@ Dashboard Admin
         </div>
     </div>
 </div>
+ @if (auth()->user()->status=='sekretaris')
 <div class="col-4 col-lg-4 col-md-4">
     <div class="card">
         <div class="card-body px-3 py-4-5">
@@ -59,6 +60,7 @@ Dashboard Admin
         </div>
     </div>
 </div>
+@endif
 </div>
 </div>
 <div class="col-lg-12 mb-4 order-0">
@@ -68,7 +70,9 @@ Dashboard Admin
         <div class="card-body">
             <h5 class="card-title text-primary">Selamat Datang Di Dashboard 🎉</h5>
 
-            <p class="mb-4">Admin</p>
+            @auth
+                      <p class="mb-4">{{ auth()->user()->name }}</p>
+                  @endauth
 
             <i class="fa-sharp fa-solid fa-face-smile text-warning"></i>
             <a href="javascript:;" class="">Enjoy your work !!!</a>
