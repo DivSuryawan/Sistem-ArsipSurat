@@ -40,12 +40,10 @@
                             </a>
                         </li>
                         @endif
+                        <hr>
                         <li class="sidebar-item  ">
                             <a href="#" class="sidebar-link" >
-                                <button type="button" class="btn btn-outline-primary block"
-                                            data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-                                          <i class="fa-solid fa-right-from-bracket"></i>Log Out
-                                        </button>
+                                <i class="fa-solid fa-user-xmark" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"></i> Log Out
                             </a>
                         </li>
                         
@@ -74,7 +72,7 @@
                                                             <span class="d-none d-sm-block">Close</span>
                                                         </button>
                                                        
-                                                        <button type="button" class="btn btn-outline-info">
+                                                        <button type="button" class="btn btn-outline-primary">
                                                              <a href="{{ route('logout') }}">
                                                             <span class="d-none d-sm-block">Yes</span>
                                                             </a>

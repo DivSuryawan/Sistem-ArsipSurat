@@ -58,7 +58,7 @@
                                     <a href="#" class="dataTable-sorter">No Surat</a>
                                 </th>
                                 <th data-sortable="" style="width: 10.7632%;">
-                                    <a href="#" class="dataTable-sorter">Tanggal Masuk</a>
+                                    <a href="#" class="dataTable-sorter">Tanggal Keluar</a>
                                 </th>
                                 <th data-sortable="" style="width: 12.7632%;">
                                     <a href="#" class="dataTable-sorter">Yang Mengeluarkan</a>
