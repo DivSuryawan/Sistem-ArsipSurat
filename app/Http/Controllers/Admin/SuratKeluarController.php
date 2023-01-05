@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\SuratMasukModel;
+use App\Models\SuratKeluarModel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
-class SuratMasukController extends Controller
+class SuratKeluarController extends Controller
 {
     public function index()
     {
-        $data = SuratMasukModel::all();
-        return view('Admin.SuratMasuk')->with('data', $data);
+        $data = array(
+            'surat-keluar' => SuratKeluarModel::with('user_rol')->get(),
+            'user' => User::all(),
+        );
+        return view('Admin.SuratKeluar')->with('data', $data);
     }
 
     public function store(Request $request)
@@ -23,7 +28,8 @@ class SuratMasukController extends Controller
             $request->all(),
             [
                 'no_surat' => 'required',
-                'tgl_masuk' => 'required',
+                'tgl_keluar' => 'required',
+                'user_id' => 'required',
                 'perihal' => 'required',
                 'sifat' => 'required',
                 'lampiran' => 'required',
@@ -39,9 +45,10 @@ class SuratMasukController extends Controller
             Alert::error('Gagal', $msg);
             return redirect()->back();
         }
-        $data = new SuratMasukModel();
+        $data = new SuratKeluarModel();
         $data->no_surat = $request->input('no_surat');
-        $data->tgl_masuk = $request->input('tgl_masuk');
+        $data->tgl_keluar = $request->input('tgl_keluar');
+        $data->user_id = $request->input('user_id');
         $data->perihal = $request->input('perihal');
         $data->sifat = $request->input('sifat');
         $data->lampiran = $request->input('lampiran');
@@ -49,7 +56,7 @@ class SuratMasukController extends Controller
         if ($request->hasfile('file_surat')) {
             $file = $request->file('file_surat');
             $filename = $file->getClientOriginalName();
-            $file->move('uploads/suratmasuk/', $filename);
+            $file->move('uploads/suratkeluar/', $filename);
             $data->file_surat = $filename;
         }
 
@@ -66,22 +73,25 @@ class SuratMasukController extends Controller
 
     public function edit($id)
     {
-        $respon = SuratMasukModel::find($id);
+        $respon = SuratKeluarModel::where('id', $id)
+            ->with('user_rol')->first();
         return response()->json($respon);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
+
         $validation = Validator::make(
             $request->all(),
             [
                 'no_surat' => 'required',
-                'tgl_masuk' => 'required',
+                'tgl_keluar' => 'required',
+                'user_id' => 'required',
                 'perihal' => 'required',
                 'sifat' => 'required',
                 'lampiran' => 'required',
                 'alamat' => 'required',
-               
+
             ],
             [
                 'required' => 'Data Tidak Boleh Kosong',
@@ -94,30 +104,33 @@ class SuratMasukController extends Controller
             return redirect()->back();
         }
 
+
+        $data = SuratKeluarModel::where('id', $id)->first();
        
-        $data = SuratMasukModel::find($request->id);
         $file_surat_cache = $data->file_surat;
+
         $data->no_surat = $request->input('no_surat');
-        $data->tgl_masuk = $request->input('tgl_masuk');
+        $data->tgl_keluar = $request->input('tgl_keluar');
+        $data->user_id = $request->input('user_id');
         $data->perihal = $request->input('perihal');
         $data->sifat = $request->input('sifat');
         $data->lampiran = $request->input('lampiran');
         $data->alamat = $request->input('alamat');
         $data->file_surat = $request->input('file_surat');
         if ($request->hasfile('file_surat')) {
-            $destination = 'uploads/suratmasuk/' . $data->file_surat;
+            $destination = 'uploads/suratkeluar/' . $data->file_surat;
             if (File::exists($destination)) {
                 File::delete($destination);
             }
             $file = $request->file('file_surat');
             $filename = $file->getClientOriginalName();
-            $file->move('uploads/suratmasuk/', $filename);
+            $file->move('uploads/suratkeluar/', $filename);
             $data->file_surat = $filename;
         }
+       
         if ($request->input('file_surat') == null) {
             $data->file_surat = $file_surat_cache;
         }
-
         $data->update();
         if ($data) {
             Alert::success('Behasil', 'Data Berhasil Di Diperbaharui');
@@ -130,8 +143,8 @@ class SuratMasukController extends Controller
 
     public function destroy($id)
     {
-        $data = SuratMasukModel::find($id);
-        $destination = 'uploads/suratmasuk/' . $data->file_surat;
+        $data = SuratKeluarModel::find($id);
+        $destination = 'uploads/suratkeluar/' . $data->file_surat;
         if (File::exists($destination)) {
             File::delete($destination);
         }
@@ -141,6 +154,6 @@ class SuratMasukController extends Controller
     }
     public function download($id)
     {
-        return response()->download('uploads/suratmasuk/' . $id);
+        return response()->download('uploads/suratkeluar/' . $id);
     }
 }

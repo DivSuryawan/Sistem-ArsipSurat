@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SuratKeluarController;
 use App\Http\Controllers\Admin\SuratMasukController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,15 @@ Route::prefix('surat-masuk/')->group(function () {
     Route::get('index', [SuratMasukController::class, 'index'])->name('suratmasuk.index');
     Route::post('store', [SuratMasukController::class, 'store'])->name('suratmasuk.store');
     Route::get('edit/{id}', [SuratMasukController::class, 'edit'])->name('suratmasuk.edit');
-    Route::post('update/', [SuratMasukController::class, 'updateData'])->name('suratmasuk.update');
-    Route::get('/delete/{id}', [SuratMasukController::class, 'delete'])->name('suratmasuk.delete');
+    Route::post('update/', [SuratMasukController::class, 'update'])->name('suratmasuk.update');
+    Route::get('/delete/{id}', [SuratMasukController::class, 'destroy'])->name('suratmasuk.delete');
     Route::get('/download/{id}', [SuratMasukController::class, 'download'])->name('suratmasuk.download');
+});
+Route::prefix('surat-keluar/')->group(function () {
+    Route::get('index', [SuratKeluarController::class, 'index'])->name('suratkeluar.index');
+    Route::post('store', [SuratKeluarController::class, 'store'])->name('suratkeluar.store');
+    Route::get('edit/{id}', [SuratKeluarController::class, 'edit'])->name('suratkeluar.edit');
+    Route::post('update/{id}', [SuratKeluarController::class, 'update'])->name('suratkeluar.update');
+    Route::get('/delete/{id}', [SuratKeluarController::class, 'destroy'])->name('suratkeluar.delete');
+    Route::get('/download/{id}', [SuratKeluarController::class, 'download'])->name('suratkeluar.download');
 });

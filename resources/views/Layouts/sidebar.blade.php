@@ -26,6 +26,12 @@
                                 <span>Surat Masuk</span>
                             </a>
                         </li>
+                        <li class="sidebar-item {{ request()->is('surat-keluar/index') ? 'active' :'' }} ">
+                            <a href="/surat-keluar/index" class="sidebar-link">
+                               <i class="fa-solid fa-envelope-open-text"></i>
+                                <span>Surat Keluar</span>
+                            </a>
+                        </li>
                         
             </div>
         </div>
