@@ -1,22 +1,21 @@
 @extends('Layouts.index')
 
 @section('title')
-    Surat Keluar
+    Users
 @endsection
 @section('judul')
-    Dashboard | Surat Keluar
+    Dashboard | Users
 @endsection
 @section('content')
 <div class="card">
     <div class="card-header" style="font-family: Verdana;">
-        Data Surat Masuk
+        Data Users
     </div>
     <div class="card-body">
         <div
             class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
             <div class="dataTable-top">
                 <div class="mt-2 d-grid gap-2 d-md-flex justify-content-md-start ">
-                     @if (auth()->user()->status=='sekretaris')
                     <button
                         type="button"
                         class="btn btn-outline-primary "
@@ -24,7 +23,6 @@
                         data-bs-target="#upsertdata">
                         + Tambah Data
                     </button>
-                    @endif
                 </div>
                 <div class="dataTable-search">
                     <div class="mt-2 d-grid gap-2 d-md-flex ">
@@ -55,27 +53,18 @@
                                     <a href="#" class="dataTable-sorter">No</a>
                                 </th>
                                 <th data-sortable="" style="width: 8%;">
-                                    <a href="#" class="dataTable-sorter">No Surat</a>
+                                    <a href="#" class="dataTable-sorter">Namat</a>
                                 </th>
                                 <th data-sortable="" style="width: 10.7632%;">
-                                    <a href="#" class="dataTable-sorter">Tanggal Keluar</a>
+                                    <a href="#" class="dataTable-sorter">Email</a>
                                 </th>
                                 <th data-sortable="" style="width: 12.7632%;">
-                                    <a href="#" class="dataTable-sorter">Yang Mengeluarkan</a>
+                                    <a href="#" class="dataTable-sorter">Status</a>
                                 </th>
-                                <th data-sortable="" style="width: 9.7632%;">
-                                    <a href="#" class="dataTable-sorter">Tujuan</a>
-                                </th>
-
-                                <th data-sortable="" style="width: 10.7632%;">
-                                    <a href="#" class="dataTable-sorter">Perihal</a>
-                                </th>
-                                <th data-sortable="" style="width: 11.7632%;">
-                                    <a href="#" class="dataTable-sorter">File Surat</a>
-                                </th>
-                                <th data-sortable="" style="width: 14.4168%;;">
+                                <th data-sortable="" style="width: 12.7632%;">
                                     <a href="#" class="dataTable-sorter">Action</a>
                                 </th>
+                               
                             </tr>
                         </thead>
                         <tbody>
@@ -83,36 +72,25 @@
                             @php $no = 1; 
                             @endphp 
 
-                            @if (count($data['surat-keluar']) > 0) 
+                            @if (count($data) > 0) 
 
-                            @foreach ($data ['surat-keluar'] as $d)
+                            @foreach ($data as $d)
                             <tr>
 
                                 <td>{{$no++}}</td>
-                                <td>{{$d->no_surat}}</td>
-                                <td>{{$d->tgl_keluar}}</td>
-                                <td>{{$d->user_rol->status}}</td>
-                                <td>{{$d->perihal}}</td>
-                                <td>{{$d->alamat}}</td>
-                                <td>{{$d->file_surat}}</td>
+                                <td>{{$d->name}}</td>
+                                <td>{{$d->email}}</td>
+                                <td>{{$d->status}}</td>
                                 <td>
-                                    
-                                    <a
-                                        href="{{ route('suratkeluar.download',$d->file_surat) }}"
-                                        class="btn btn-outline-success">
-                                        <i class="fa-solid fa-download"></i>
-                                    </a>
-                                     @if (auth()->user()->status=='sekretaris')
+                                   
                                    <button class="btn btn-outline-primary" id="btn_edit" data-id="{{$d->id}}">
                                         <i class="fa fa-edit"></i>
                                     </button>
-
                                     <a
-                                        href="{{ route('suratkeluar.delete',$d->id) }}"
+                                        href="{{ route('user.delete',$d->id) }}"
                                         class="btn btn-outline-danger delete-confirm">
                                         <i class="fa fa-trash"></i>
                                     </a>
-                                    @endif
                                 </td>
                             </tr>
 
@@ -168,51 +146,30 @@
                         <i data-feather="x"></i>
                 </div>
                 <div class="modal-body">
-                    <form id="form-input" action="{{ route('suratkeluar.store') }}"  method="POST" enctype="multipart/form-data">
+                    <form id="form-input" action="{{ route('user.store') }}"  method="POST" enctype="multipart/form-data">
                      @csrf
-                        <div class="form-group">
-                           <input type="hidden" id="id" name="id">
+                       <div class="fomr-group">
+                           <input type="hidden" id="id" name="id" value="">
                         </div>
                         <div class=" form-group">
-                            <label for="no_surat">No surat</label>
-                            <input type="text" class="form-control" name="no_surat" id="no_surat" aria-describedby="emailHelp" placeholder="Masukan nomor surat" >
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="emailHelp" placeholder="Masukan Nama" >
                          </div>
-                        <div class="form-group">
-                            <label for="tgl_masuk">Tanggal Keluar</label>
-                            <input type="date" class="form-control" name="tgl_keluar" id="tgl_keluar"  placeholder="Masukan tipe surat">
-                        </div>
-                        <div class="form-group">
-                             <label for="keluar">Yang Mengeluarkan</label>
-                            <input type="hidden" name="id" id="id">
-                            <select id="user_id" name="user_id" class="form-control" required>
+                         <div class="form-group">
+                            <label for="status">Status</label>
+                            <select name="status" id="status" class="form-control">
                                 <option selected disabled>Pilih</option>
-                                @foreach ($data['user'] as $d)
-                                    <option value="{{$d->id}}">{{$d->status}}</option>
-                                @endforeach
+                                <option>pimpinan</option>
+                                <option>sekretaris</option>
                             </select>
                         </div>
-                     
                         <div class="form-group">
-                            <label for="perihal">Perihal</label>
-                            <input type="text" class="form-control" name="perihal" id="perihal"  placeholder="Masukan perihal">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" id="email"  placeholder="Masukan email">
                         </div>
                         <div class="form-group">
-                            <label for="sifat">Sifat</label>
-                            <input type="text" class="form-control" name="sifat" id="sifat"  placeholder="Masukan sifat">
-                        </div>
-                        <div class="form-group">
-                            <label for="lampiran">Lampiran</label>
-                            <input type="text" class="form-control" name="lampiran" id="lampiran"  placeholder="Masukan Lampiran">
-                        </div>
-                        <div class="form-group">
-                            <label for="alamat">Tujuan</label>
-                            <input type="text" class="form-control" name="alamat" id="alamat"  placeholder="Masukan Tujuan">
-                        </div>
-              
-                        <div class="form-group">
-                            <label for="file_surat">File Surat</label>
-                            <input type="file" class="form-control" name="file_surat" id="file_surat"  placeholder="Upload file">
-                        </div>
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" id="password"  placeholder="Masukan password">
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="batal" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
@@ -242,18 +199,14 @@ $(document).ready(function(){
         {
           
             let dataId = $(this).data('id');
-            $.get('/surat-keluar/'+ 'edit/' + dataId, function (data){
+            $.get('/user/'+ 'edit/' + dataId, function (data){
                 $('#upsertdata').modal('show');
                 $('#id').val(data.id);
-                $('#no_surat').val(data.no_surat);
-                $('#tgl_keluar').val(data.tgl_keluar);
-                $('#user_id').val(data.user_id);
-                $('#perihal').val(data.perihal);
-                $('#sifat').val(data.sifat);
-                $('#lampiran').val(data.lampiran);
-                $('#alamat').val(data.alamat);
-                $('#file_surat').val(data.$filename);
-                $('#form-input').attr('action' , '{{ route('suratkeluar.update', '') }}'+'/'+dataId);
+                $('#name').val(data.name);
+                $('#status').val(data.status);
+                $('#email').val(data.email);
+                $('#password').val(data.password);
+                $('#form-input').attr('action' , '{{ route('user.update') }}');
             });
         });
 });      
